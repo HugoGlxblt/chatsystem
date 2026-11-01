@@ -1,0 +1,6 @@
+#fichiers a ne pas mettre sur le git
+target/
+*.class
+*.jar
+.vscode/
+.project
