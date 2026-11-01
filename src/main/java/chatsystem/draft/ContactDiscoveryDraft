@@ -1,0 +1,76 @@
+package chatsystem.draft;
+
+import java.io.IOException;
+import java.net.*;
+
+//ce fichier contient le travail réalisé lors de la première séance de tp chatsystem
+//, en reprenant les tp précédents (notamment le tp udp)
+
+public class ContactDiscoveryDraft {
+
+    private static class GreeterServer extends Thread {
+
+        @Override
+        public void run() {
+            try {
+                DatagramSocket socket = new DatagramSocket(4445);
+
+                byte[] buf = new byte[256];
+
+                while (true) {
+                    DatagramPacket inPacket = new DatagramPacket(buf, buf.length);
+
+                    socket.receive(inPacket);
+
+                    String received =
+                        new String(
+                            inPacket.getData(),
+                            0,
+                            inPacket.getLength()
+                        );
+
+                    System.out.println("Received: " + received);
+
+                    if (received.equals("end")) {
+                        socket.close();
+                        break;
+                    }
+                }
+
+            } catch (IOException exc) {
+                exc.printStackTrace();
+            }
+        }
+    }
+
+    public static void sendName(String args) throws IOException {
+
+        DatagramSocket socket = new DatagramSocket(4444);
+
+        InetAddress destAddress = InetAddress.getByName("127.255.255.255"); //TODO adresse de broadcast
+
+        int destPort = 4445;
+
+        byte[] buf = args.getBytes();
+
+        DatagramPacket outPacket =
+                new DatagramPacket(
+                    buf,
+                    buf.length,
+                    destAddress,
+                    destPort
+                );
+
+        socket.send(outPacket);
+
+        socket.close();
+    }
+
+    public static void main(String[] args) throws IOException {
+
+        Thread gt = new GreeterServer();
+        gt.start();
+
+        sendName("bob");
+    }
+}
