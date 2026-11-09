@@ -49,7 +49,7 @@ public class ContactList {
             System.out.println("contact: "+pseudo+" ajouté");
         }
         System.out.println("Liste des contacts:"+this.getContactList().toString());
-        System.out.println("--------------------------------------------------");
+        System.out.println("--------------------------------------------------") ;
     }
 
     public List<Contact> getListOfContact() {
