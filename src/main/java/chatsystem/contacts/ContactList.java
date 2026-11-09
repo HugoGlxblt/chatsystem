@@ -12,7 +12,9 @@ public class ContactList {
         
     }
 
-    
+    public HashMap<String, Contact> getContactList(){
+        return this.map;
+    }
 
     public boolean hasPseudo(String pseudo) {
         for (Contact contact : this.map.values()) {

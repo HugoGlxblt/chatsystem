@@ -5,18 +5,25 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observer;
+
+import chatsystem.controlleur.Controller;
 
 public class UDPServer extends Thread{
     
-    private int port;
-    private final List<Observer> observers = new ArrayList<>();
+    public interface Observer {
+        /** Method that is called each time a message is received. */
+        void handleMessage(String ip, String received);
+    }
+
+
+    private final int port;
+    private final List<Controller> observers = new ArrayList<>();
     
     public UDPServer(int port){
         this.port = port;
     }
 
-    public void addObserver(Observer obs) {
+    public void addObserver(Controller obs) {
         synchronized (this.observers) {
             this.observers.add(obs);
         }
@@ -40,12 +47,12 @@ public class UDPServer extends Thread{
                             0,
                             inPacket.getLength()
                         );
-/*/
+
                     synchronized (this.observers) {
-                        for (Observer obs : this.observers) {
-                            obs.handle(received);
+                        for (Controller obs : this.observers) {
+                            obs.handleMessage(inPacket.getAddress().toString(), received);
                         }
-                    }*/
+                    }
                 }
                 
 
