@@ -25,15 +25,31 @@ public class ContactList {
         return false;
     }
 
+    public boolean hasIp(String ip) {
+        for (String adresseIp : this.map.keySet()) {
+            if (adresseIp.equals(ip)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public void addUser(String ip, String pseudo) throws PseudoAlreadyExists {
         if (hasPseudo(pseudo)) {
             throw new PseudoAlreadyExists(pseudo);
-        } else {
+        } else if(hasIp(ip)){
+            System.out.println("contact: "+map.get(ip).getPseudo()+"modifié, le nouveau pseudo est:"+pseudo);
+            Contact contact = new Contact(pseudo);
+            map.put(ip, contact);
+        }
+        else {
             Contact contact = new Contact(pseudo);
             map.put(ip, contact);
             System.out.println("contact: "+pseudo+" ajouté");
         }
+        System.out.println("Liste des contacts:"+this.getContactList().toString());
+        System.out.println("--------------------------------------------------");
     }
 
     public List<Contact> getListOfContact() {
